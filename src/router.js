@@ -6,6 +6,8 @@ import store from "@/store"
 Vue.use(Router);
 
 const router = new Router({
+    //name link active class for css style.
+    linkExactActiveClass: 'wine-app-active-class',
     mode: "history",
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
@@ -37,24 +39,42 @@ const router = new Router({
             props: true,
             component: () =>
                 import(/* webpackChunkName: "AreaDetails"*/ "./views/AreaDetails"),
+            beforeEnter: (to, from, next) => {
+                const exists = store.state.areas.find(
+                    area => area.slug === to.params.slug
+                );
+                if (exists) {
+                    next();
+                } else {
+                    next({ name: "notFound" });
+                }
+            }
+        },
+        {
+            path: "/area/:slug/:winerySlug",
+            name: "WineryDetails",
+            props: true,
+            component: () =>
+                import(/* webpackChunkName: "AreaDetails"*/ "./views/WineryDetails"),
 
-        }
+
+        },
 
     ]
 })
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.user) {
-            next({
-                name: "login",
-                query: { redirect: to.fullPath }
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!store.user) {
+//             next({
+//                 name: "login",
+//                 query: { redirect: to.fullPath }
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;

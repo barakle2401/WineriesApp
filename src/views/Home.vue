@@ -21,7 +21,7 @@
   .main-title {
     font-size: 3rem !important;
     color: #d81b60;
-    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.01rem;
     background-color: rgba(0, 0, 0, 0.39);
     padding: 1rem;
     border-radius: 30px;
